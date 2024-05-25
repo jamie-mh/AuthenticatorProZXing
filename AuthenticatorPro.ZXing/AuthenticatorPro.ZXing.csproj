@@ -4,11 +4,26 @@
         <TargetFramework>net8.0</TargetFramework>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+        <PackageId>AuthenticatorPro.ZXing</PackageId>
+        <Version>1.0.0</Version>
+        <Authors>jamie-mh</Authors>
+        <Copyright>Copyright (c) jamie-mh 2024</Copyright>
+        <ProjectUrl>https://authenticatorpro.jmh.me</ProjectUrl>
+        <RepositoryUrl>https://github.com/jamie-mh/AuthenticatorProZXing</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
+        <Description>Build of ZXing-C++ for Authenticator Pro</Description>
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="../zxing-cpp.release/core/libZXing.so" PackagePath="runtimes/linux-x64/native/" Pack="true" />
-        <None Update="../zxing-cpp.release/core/libZXing.so">
+        <None Include="runtimes/linux-x64/libZXing.so" PackagePath="runtimes/linux-x64/native/" Pack="true" />
+        <None Include="runtimes/android-armeabi-v7a/libZXing.so" PackagePath="runtimes/android-arm/native/" Pack="true" />
+        <None Include="runtimes/android-arm64-v8a/libZXing.so" PackagePath="runtimes/android-arm64/native/" Pack="true" />
+        <None Include="runtimes/android-x86/libZXing.so" PackagePath="runtimes/android-x86/native/" Pack="true" />
+        <None Include="runtimes/android-x86_64/libZXing.so" PackagePath="runtimes/android-x64/native/" Pack="true" />
+
+        <None Update="libZXing.so">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>

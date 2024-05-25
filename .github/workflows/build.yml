@@ -1,0 +1,79 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+env:
+  FRAMEWORK: net8.0
+  RUNTIME: linux-x64
+  CONFIGURATION: Release
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Build ZXing-C++ (Linux x64)
+        run: |
+          cmake -S zxing-cpp -B zxing-cpp.linux-x64 \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBUILD_SHARED_LIBS=ON \
+            -DZXING_READERS=ON \
+            -DZXING_WRITERS=OFF \
+            -DCMAKE_CXX_STANDARD=20 \
+            -DZXING_C_API=ON
+
+          cmake --build zxing-cpp.linux-x64 --config Release
+
+          mkdir -p AuthenticatorPro.ZXing/runtimes/linux-x64
+          cp zxing-cpp.linux-x64/core/libZXing.so AuthenticatorPro.ZXing/runtimes/linux-x64/libZXing.so
+          strip --strip-debug AuthenticatorPro.ZXing/runtimes/linux-x64/libZXing.so
+          cp AuthenticatorPro.ZXing/runtimes/linux-x64/libZXing.so AuthenticatorPro.ZXing/libZXing.so
+
+      - name: Build ZXing-C++ (Android)
+        run: |
+          for abi in armeabi-v7a arm64-v8a x86 x86_64 ; do
+            cmake -S zxing-cpp -B "zxing-cpp.android-$abi" \
+              -DCMAKE_BUILD_TYPE=Release \
+              -DBUILD_SHARED_LIBS=ON \
+              -DZXING_READERS=ON \
+              -DZXING_WRITERS=OFF \
+              -DCMAKE_CXX_STANDARD=20 \
+              -DZXING_C_API=ON \
+              -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
+              -DANDROID_ABI=$abi
+
+            cmake --build "zxing-cpp.android-$abi" --config Release
+
+            mkdir -p "AuthenticatorPro.ZXing/runtimes/android-$abi"
+            cp "zxing-cpp.android-$abi/core/libZXing.so" "AuthenticatorPro.ZXing/runtimes/android-$abi/libZXing.so"
+            $ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip "AuthenticatorPro.ZXing/runtimes/android-$abi/libZXing.so"
+          done
+
+      - name: Build
+        run: |
+          dotnet build --configuration $CONFIGURATION AuthenticatorPro.ZXing.sln
+
+      - name: Test
+        run: |
+          dotnet test --configuration $CONFIGURATION AuthenticatorPro.ZXing.Test/AuthenticatorPro.ZXing.Test.csproj
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: authenticatorpro-zxing
+          path: AuthenticatorPro.ZXing/bin/**/AuthenticatorPro.ZXing*.nupkg
+
+      - name: Publish package
+        run: |
+          pkg=$(find AuthenticatorPro.ZXing/bin/$CONFIGURATION/ -name '*.nupkg')
+          dotnet nuget push $pkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json
