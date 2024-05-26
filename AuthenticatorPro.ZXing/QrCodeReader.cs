@@ -26,7 +26,7 @@ namespace AuthenticatorPro.ZXing
 
             if (barcode == IntPtr.Zero)
             {
-                throw new QrCodeException("Failed to scan QR code", ErrorType.None);
+                return null;
             }
             
             using var qrCode = new QrCode(barcode);

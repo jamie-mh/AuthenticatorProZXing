@@ -1,4 +1,3 @@
-using System;
 using SkiaSharp;
 using Xunit;
 
@@ -53,19 +52,7 @@ namespace AuthenticatorPro.ZXing.Test
         {
             var reader = new QrCodeReader();
             using var image = ReadImage("data/barcode.png");
-            
-            try
-            {
-                reader.Read(image);
-            }
-            catch (QrCodeException e)
-            {
-                Assert.Equal(ErrorType.None, e.Type);
-            }
-            catch (Exception)
-            {
-                Assert.Fail();
-            }
+            Assert.Null(reader.Read(image));
         }
         
         [Fact]
@@ -73,19 +60,7 @@ namespace AuthenticatorPro.ZXing.Test
         {
             var reader = new QrCodeReader();
             using var image = ReadImage("data/smile.png");
-
-            try
-            {
-                reader.Read(image);
-            }
-            catch (QrCodeException e)
-            {
-                Assert.Equal(ErrorType.None, e.Type);
-            }
-            catch (Exception)
-            {
-                Assert.Fail();
-            }
+            Assert.Null(reader.Read(image));
         }
     }
 }
