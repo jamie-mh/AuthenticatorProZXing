@@ -14,14 +14,15 @@
         <RepositoryType>git</RepositoryType>
         <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
         <Description>Build of ZXing-C++ for Authenticator Pro</Description>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <ItemGroup>
         <None Include="runtimes/linux-x64/libZXing.so" PackagePath="runtimes/linux-x64/native/" Pack="true" />
         <None Include="runtimes/android-armeabi-v7a/libZXing.so" PackagePath="runtimes/android-arm/native/" Pack="true" />
         <None Include="runtimes/android-arm64-v8a/libZXing.so" PackagePath="runtimes/android-arm64/native/" Pack="true" />
-        <None Include="runtimes/android-x86/libZXing.so" PackagePath="runtimes/android-x86/native/" Pack="true" />
         <None Include="runtimes/android-x86_64/libZXing.so" PackagePath="runtimes/android-x64/native/" Pack="true" />
+        <None Include="../README.md" Pack="true" PackagePath="/"/>
 
         <None Update="libZXing.so">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
