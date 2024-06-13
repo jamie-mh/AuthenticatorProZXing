@@ -12,10 +12,18 @@ namespace AuthenticatorPro.ZXing.Test
             return new ImageView(pixels.ToArray(), image.Width, image.Height, ImageFormat.BGRA);
         }
         
-        [Fact]
-        public void Read_ok()
+        [Theory]
+        [InlineData(Binarizer.LocalAverage)]
+        [InlineData(Binarizer.GlobalHistogram)]
+        [InlineData(Binarizer.FixedThreshold)]
+        [InlineData(Binarizer.BoolCast)]
+        public void Read_ok(Binarizer binarizer)
         {
-            var reader = new QrCodeReader();
+            var reader = new QrCodeReader(new ReaderOptions
+            {
+                Binarizer = binarizer
+            });
+            
             using var image = ReadImage("data/qr.png");
             var text = reader.Read(image);
             Assert.Equal("otpauth://totp/Standard%3ATotp?secret=54VEGZFJHM3BGDONFERMPUOKNGDJETGM&issuer=Standard", text);
