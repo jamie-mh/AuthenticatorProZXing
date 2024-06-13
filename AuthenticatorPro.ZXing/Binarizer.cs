@@ -3,7 +3,7 @@
 
 namespace AuthenticatorPro.ZXing
 {
-    public enum Binarizer
+    public enum Binarizer : byte
     {
         LocalAverage = 0,
         GlobalHistogram = 1,
