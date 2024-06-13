@@ -64,5 +64,8 @@ namespace AuthenticatorPro.ZXing.Interop
         
         [LibraryImport(SharedObject, EntryPoint = "ZXing_ReaderOptions_setFormats")]
         internal static partial void ReaderOptions_SetFormats(IntPtr handle, BarcodeFormats formats);
+        
+        [LibraryImport(SharedObject, EntryPoint = "ZXing_ReaderOptions_setMaxNumberOfSymbols")]
+        internal static partial void ReaderOptions_SetMaxNumberOfSymbols(IntPtr handle, byte value);
     }
 }

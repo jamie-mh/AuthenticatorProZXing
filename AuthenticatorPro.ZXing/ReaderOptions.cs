@@ -14,7 +14,10 @@ namespace AuthenticatorPro.ZXing
         {
             var handle = NativeMethods.ReaderOptions_New();
             Guard.ThrowIfNullPointer(handle);
+            
             NativeMethods.ReaderOptions_SetFormats(handle, BarcodeFormats.QrCode);
+            NativeMethods.ReaderOptions_SetMaxNumberOfSymbols(handle, 1);
+            
             Handle = new ReaderOptionsSafeHandle(handle);
         }
 
