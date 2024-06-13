@@ -16,7 +16,7 @@ namespace AuthenticatorPro.ZXing
             Handle = new ImageViewSafeHandle(handle);
         }
 
-        public ImageView(byte[] data, int width, int height, ImageFormat format, int rowStride = 0, int pixelStride = 0)
+        public ImageView(ReadOnlySpan<byte> data, int width, int height, ImageFormat format, int rowStride = 0, int pixelStride = 0)
         {
             var handle = NativeMethods.ImageView_NewChecked(data, data.Length, width, height, format, rowStride, pixelStride);
             Guard.ThrowIfNullPointer(handle);

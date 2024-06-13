@@ -9,7 +9,7 @@ namespace AuthenticatorPro.ZXing.Test
         {
             var image = SKBitmap.Decode(path);
             var pixels = image.GetPixelSpan();
-            return new ImageView(pixels.ToArray(), image.Width, image.Height, ImageFormat.BGRA);
+            return new ImageView(pixels, image.Width, image.Height, ImageFormat.BGRA);
         }
         
         [Theory]

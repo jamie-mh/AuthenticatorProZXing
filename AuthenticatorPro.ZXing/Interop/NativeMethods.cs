@@ -38,7 +38,7 @@ namespace AuthenticatorPro.ZXing.Interop
         
         // ImageView
         [LibraryImport(SharedObject, EntryPoint = "ZXing_ImageView_new_checked")]
-        internal static partial IntPtr ImageView_NewChecked(byte[] data, int size, int width, int height, ImageFormat format, int rowStride, int pixelStride);
+        internal static partial IntPtr ImageView_NewChecked(ReadOnlySpan<byte> data, int size, int width, int height, ImageFormat format, int rowStride, int pixelStride);
         
         [LibraryImport(SharedObject, EntryPoint = "ZXing_ImageView_delete")]
         internal static partial void ImageView_Delete(IntPtr handle);
